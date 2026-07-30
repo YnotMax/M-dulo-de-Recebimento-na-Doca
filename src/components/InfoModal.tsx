@@ -23,11 +23,11 @@ export const InfoModal: React.FC<InfoModalProps> = ({ isOpen, onClose, title, im
             <X className="w-5 h-5" />
           </button>
         </div>
-        <div className="flex-1 overflow-auto p-4 bg-slate-50 dark:bg-slate-950 flex items-center justify-center">
+        <div className="flex-1 overflow-auto p-4 bg-slate-50 dark:bg-slate-950">
           <img 
             src={imageSrc} 
             alt={title} 
-            className="max-w-full h-auto rounded-lg shadow-sm border border-slate-200 dark:border-slate-800"
+            className="block max-w-full h-auto mx-auto rounded-lg shadow-sm border border-slate-200 dark:border-slate-800"
             onError={(e) => {
               // Fallback para caso a imagem não tenha sido enviada para a pasta public ainda
               e.currentTarget.src = `https://placehold.co/600x800/e2e8f0/475569?text=${encodeURIComponent('Faça o upload de\n' + imageSrc.replace('/', '') + '\nna pasta public')}`;
