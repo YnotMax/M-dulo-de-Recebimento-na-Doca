@@ -1,0 +1,8 @@
+{
+  "name": "Módulo de Recebimento na Doca",
+  "description": "Sistema de conferência cega e recebimento de mercadorias via integração com SEFAZ.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
