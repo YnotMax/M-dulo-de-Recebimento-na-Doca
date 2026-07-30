@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Scan, Barcode } from 'lucide-react';
+import { Scan, Barcode, Info } from 'lucide-react';
+import { InfoModal } from './InfoModal';
 
 interface ScannerStepProps {
   onScan: (key: string) => void;
@@ -8,6 +9,7 @@ interface ScannerStepProps {
 export const ScannerStep: React.FC<ScannerStepProps> = ({ onScan }) => {
   const [nfeKey, setNfeKey] = useState('');
   const [error, setError] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleScan = (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,7 +31,18 @@ export const ScannerStep: React.FC<ScannerStepProps> = ({ onScan }) => {
   return (
     <div className="flex flex-col items-center justify-center p-6 space-y-8 w-full max-w-md mx-auto">
       <div className="text-center space-y-2">
-        <h2 className="text-2xl font-semibold text-slate-800 dark:text-white">Captura na Doca</h2>
+        <div className="flex flex-col items-center justify-center gap-3">
+          <h2 className="text-2xl font-semibold text-slate-800 dark:text-white">Captura na Doca</h2>
+          <button 
+            type="button"
+            onClick={() => setIsModalOpen(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-indigo-100 text-indigo-700 hover:bg-indigo-200 dark:bg-indigo-900/50 dark:text-indigo-300 dark:hover:bg-indigo-800/60 rounded-full font-medium text-sm transition-colors shadow-sm"
+            title="Ver diagrama explicativo"
+          >
+            <Info className="w-4 h-4" />
+            Ver Diagrama do Processo
+          </button>
+        </div>
         <p className="text-sm text-slate-500 dark:text-slate-400">Escaneie o código de barras do DANFE ou digite a chave de acesso.</p>
       </div>
 
@@ -73,6 +86,13 @@ export const ScannerStep: React.FC<ScannerStepProps> = ({ onScan }) => {
       >
         Simular escaneamento com coletor laser
       </button>
+
+      <InfoModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        title="Diagrama: Captura na Doca (Página 1)" 
+        imageSrc="/diagrama-1.png" 
+      />
     </div>
   );
 };

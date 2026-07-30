@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { CountedProduct, NFeData } from '../types';
-import { Package, ArrowRight, Save, Plus, Minus } from 'lucide-react';
+import { Package, ArrowRight, Save, Plus, Minus, Info } from 'lucide-react';
+import { InfoModal } from './InfoModal';
 
 interface BlindCheckStepProps {
   nfeData: NFeData;
@@ -9,6 +10,7 @@ interface BlindCheckStepProps {
 
 export const BlindCheckStep: React.FC<BlindCheckStepProps> = ({ nfeData, onComplete }) => {
   const [counts, setCounts] = useState<Record<string, number>>({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleCountChange = (productId: string, value: string) => {
     if (value === '') {
@@ -40,7 +42,18 @@ export const BlindCheckStep: React.FC<BlindCheckStepProps> = ({ nfeData, onCompl
   return (
     <div className="w-full max-w-3xl mx-auto flex flex-col h-full max-h-[85vh]">
       <div className="flex flex-col gap-1 mb-6 px-4">
-        <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">Conferência Cega</h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">Conferência Cega</h2>
+          <button 
+            type="button"
+            onClick={() => setIsModalOpen(true)}
+            className="flex items-center gap-2 px-3 py-1.5 bg-indigo-100 text-indigo-700 hover:bg-indigo-200 dark:bg-indigo-900/50 dark:text-indigo-300 dark:hover:bg-indigo-800/60 rounded-full font-medium text-sm transition-colors shadow-sm"
+            title="Ver diagrama explicativo"
+          >
+            <Info className="w-4 h-4" />
+            Diagrama
+          </button>
+        </div>
         <p className="text-slate-600 dark:text-slate-400 text-sm">
           Fornecedor: <span className="font-medium text-slate-800 dark:text-slate-200">{nfeData.provider}</span>
         </p>
@@ -120,6 +133,13 @@ export const BlindCheckStep: React.FC<BlindCheckStepProps> = ({ nfeData, onCompl
           </button>
         </div>
       </form>
+
+      <InfoModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        title="Diagrama: Conferência Cega (Página 3)" 
+        imageSrc="/diagrama-3.png" 
+      />
     </div>
   );
 };

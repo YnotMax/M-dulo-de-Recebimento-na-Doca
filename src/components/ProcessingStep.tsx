@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Loader2, ShieldCheck, FileJson, Server } from 'lucide-react';
+import { Loader2, ShieldCheck, FileJson, Server, Info } from 'lucide-react';
+import { InfoModal } from './InfoModal';
 
 interface ProcessingStepProps {
   onComplete: () => void;
@@ -13,6 +14,7 @@ const steps = [
 
 export const ProcessingStep: React.FC<ProcessingStepProps> = ({ onComplete }) => {
   const [currentStep, setCurrentStep] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     let timer: number;
@@ -20,16 +22,24 @@ export const ProcessingStep: React.FC<ProcessingStepProps> = ({ onComplete }) =>
       timer = window.setTimeout(() => {
         setCurrentStep(prev => prev + 1);
       }, 1000); // 1 second per step
-    } else {
-      timer = window.setTimeout(() => {
-        onComplete();
-      }, 500);
     }
     return () => clearTimeout(timer);
-  }, [currentStep, onComplete]);
+  }, [currentStep]);
 
   return (
-    <div className="flex flex-col items-center justify-center py-16 px-6 w-full max-w-md mx-auto space-y-10">
+    <div className="flex flex-col items-center justify-center py-16 px-6 w-full max-w-md mx-auto space-y-10 relative">
+      <div className="absolute top-0 right-0 p-4">
+        <button 
+          type="button"
+          onClick={() => setIsModalOpen(true)}
+          className="flex items-center gap-2 px-4 py-2 bg-indigo-100 text-indigo-700 hover:bg-indigo-200 dark:bg-indigo-900/50 dark:text-indigo-300 dark:hover:bg-indigo-800/60 rounded-full font-medium text-sm transition-colors shadow-sm"
+          title="Ver diagrama explicativo"
+        >
+          <Info className="w-4 h-4" />
+          Ver Diagrama
+        </button>
+      </div>
+
       <div className="relative flex items-center justify-center">
         <Loader2 className="w-16 h-16 text-blue-600 dark:text-blue-500 animate-spin absolute" />
         <div className="w-12 h-12 bg-white dark:bg-slate-900 rounded-full z-10 flex items-center justify-center">
@@ -75,6 +85,22 @@ export const ProcessingStep: React.FC<ProcessingStepProps> = ({ onComplete }) =>
           );
         })}
       </div>
+
+      {currentStep >= steps.length && (
+        <button
+          onClick={onComplete}
+          className="w-full py-3.5 px-4 mt-6 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-sm transition-all flex items-center justify-center gap-2 animate-in fade-in zoom-in duration-300"
+        >
+          Iniciar Conferência
+        </button>
+      )}
+
+      <InfoModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        title="Diagrama: Processamento Fiscal (Página 2)" 
+        imageSrc="/diagrama-2.png" 
+      />
     </div>
   );
 };

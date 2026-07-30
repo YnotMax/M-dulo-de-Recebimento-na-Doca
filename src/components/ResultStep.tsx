@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { CountedProduct } from '../types';
-import { CheckCircle, AlertTriangle, ArrowLeft, Download, Check } from 'lucide-react';
+import { CheckCircle, AlertTriangle, ArrowLeft, Download, Check, Info } from 'lucide-react';
+import { InfoModal } from './InfoModal';
 
 interface ResultStepProps {
   products: CountedProduct[];
@@ -10,6 +11,7 @@ interface ResultStepProps {
 
 export const ResultStep: React.FC<ResultStepProps> = ({ products, onConfirm, onBack }) => {
   const [isConfirming, setIsConfirming] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const hasDivergence = products.some(p => p.expectedQuantity !== p.countedQuantity);
 
   const handleConfirm = () => {
@@ -24,7 +26,18 @@ export const ResultStep: React.FC<ResultStepProps> = ({ products, onConfirm, onB
     <div className="w-full max-w-4xl mx-auto flex flex-col pb-8">
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">Resultado da Conferência</h2>
+          <div className="flex items-center gap-3">
+            <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">Resultado da Conferência</h2>
+            <button 
+              type="button"
+              onClick={() => setIsModalOpen(true)}
+              className="flex items-center gap-2 px-3 py-1.5 bg-indigo-100 text-indigo-700 hover:bg-indigo-200 dark:bg-indigo-900/50 dark:text-indigo-300 dark:hover:bg-indigo-800/60 rounded-full font-medium text-sm transition-colors shadow-sm"
+              title="Ver diagrama explicativo"
+            >
+              <Info className="w-4 h-4" />
+              Diagrama
+            </button>
+          </div>
           <p className="text-slate-600 dark:text-slate-400 text-sm mt-1">Validação das contagens físicas versus faturamento XML.</p>
         </div>
         <button 
@@ -129,6 +142,13 @@ export const ResultStep: React.FC<ResultStepProps> = ({ products, onConfirm, onB
           )}
         </button>
       </div>
+
+      <InfoModal 
+        isOpen={isModalOpen} 
+        onClose={() => setIsModalOpen(false)} 
+        title="Diagrama: Validação de Divergências (Página 4)" 
+        imageSrc="/diagrama-4.png" 
+      />
     </div>
   );
 };
